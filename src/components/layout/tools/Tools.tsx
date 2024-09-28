@@ -1,13 +1,12 @@
 import { Flex } from '@chakra-ui/react'
 import CircleButton from './CircleButton'
+import ColorButton from './ColorButton'
 import ConnectButton from './ConnectButton'
 import DeleteButton from './DeleteButton'
 import DisconnectButton from './DisconnectButton'
 import DragButton from './DragButton'
 import NodeButton from './NodeButton'
-import SelectButton from './SelectButton'
 import ZoomButton from './ZoomButton'
-import ColorButton from './ColorButton'
 
 const Tools = () => {
   return (
@@ -22,7 +21,6 @@ const Tools = () => {
     >
       <Flex flexDir="column" gap={2}>
         <DragButton />
-        {/* <SelectButton /> */}
         <NodeButton />
         <CircleButton />
         <ConnectButton />

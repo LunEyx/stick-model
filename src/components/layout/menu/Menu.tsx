@@ -1,4 +1,5 @@
-import MenuButton from './MenuButton'
+import LoadButton from './LoadButton'
+import SaveButton from './SaveButton'
 
 const Menu = () => {
   return (
@@ -13,10 +14,8 @@ const Menu = () => {
         borderBottom: '1px #424242 solid',
       }}
     >
-      <MenuButton />
-      <MenuButton />
-      <MenuButton />
-      <MenuButton />
+      <SaveButton />
+      <LoadButton />
     </div>
   )
 }

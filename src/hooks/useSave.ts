@@ -39,5 +39,5 @@ export const useSave = () => {
     }
   }
 
-  return [save, load]
+  return { save, load }
 }
