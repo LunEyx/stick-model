@@ -4,12 +4,12 @@ import { useAppDispatch, useAppSelector } from './useRedux'
 export const useSave = () => {
   const idCounter = useAppSelector((state) => state.model.idCounter)
   const heads = useAppSelector((state) => state.model.heads)
-  const vertices = useAppSelector((state) => state.model.vertices)
+  const dots = useAppSelector((state) => state.model.dots)
   const edges = useAppSelector((state) => state.model.edges)
   const dispatch = useAppDispatch()
 
   const save = () => {
-    const data = JSON.stringify({ idCounter, heads, vertices, edges })
+    const data = JSON.stringify({ idCounter, heads, dots, edges })
     if (data) {
       const a = document.createElement('a')
       a.href = `data:text/json;charset=utf-8,${encodeURIComponent(data)}`

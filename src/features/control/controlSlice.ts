@@ -1,23 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 export enum Mode {
-  IDLE,
-  ADD_VERTEX,
-  REMOVE_VERTEX,
-  ADD_EDGE,
-  REMOVE_EDGE,
+  DRAG = 'DRAG',
+  SELECT = 'SELECT',
+  DOT = 'DOT',
+  CIRCLE = 'CIRCLE',
+  CONNECT = 'CONNECT',
+  DISCONNECT = 'DISCONNECT',
+  ZOOM = 'ZOOM',
+  DELETE = 'DELETE',
 }
 
 export interface ControlState {
   mode: Mode
   selected: number | null
-  multiSelectRect: { start: Vertex; end: Vertex } | null
+  color: string
+  multiSelectRect: { start: Point; end: Point } | null
   multiSelected: { [key: string]: boolean }
 }
 
 const initialState: ControlState = {
-  mode: Mode.IDLE,
+  mode: Mode.DRAG,
   selected: null,
+  color: '#0000FF',
   multiSelectRect: null,
   multiSelected: {},
 }
@@ -33,7 +38,10 @@ const ControlSlice = createSlice({
     setSelected: (state, action: { payload: number | null }) => {
       state.selected = action.payload
     },
-    setMultiSelectRect: (state, action: { payload: { start?: Vertex; end?: Vertex } | null }) => {
+    setColor: (state, action: { payload: string }) => {
+      state.color = action.payload
+    },
+    setMultiSelectRect: (state, action: { payload: { start?: Point; end?: Point } | null }) => {
       if (!action.payload) {
         state.multiSelectRect = null
         return
@@ -56,6 +64,6 @@ const ControlSlice = createSlice({
   },
 })
 
-export const { setMode, setSelected, setMultiSelectRect, setMultiSelected } = ControlSlice.actions
+export const { setMode, setSelected, setColor, setMultiSelectRect, setMultiSelected } = ControlSlice.actions
 
 export default ControlSlice.reducer

@@ -2,7 +2,7 @@ import { CircleConfig } from 'konva/lib/shapes/Circle'
 import { Circle } from 'react-konva'
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux'
 import { Mode, setMultiSelected } from '../../features/control/controlSlice'
-import { moveVertex } from '../../features/model/modelSlice'
+import { moveDot } from '../../features/model/modelSlice'
 import { KonvaEventObject } from 'konva/lib/Node'
 import { useState } from 'react'
 
@@ -10,12 +10,12 @@ type JointProps = CircleConfig & {
   idd: number
 }
 
-const Joint = (props: JointProps) => {
+const Dot = (props: JointProps) => {
   const dispatch = useAppDispatch()
   const mode = useAppSelector((state) => state.control.mode)
   const selected = useAppSelector((state) => state.control.selected)
   const multiSelected = useAppSelector((state) => state.control.multiSelected)
-  const vertices = useAppSelector((state) => state.model.vertices)
+  const dots = useAppSelector((state) => state.model.dots)
   const [dragStartPos, setDragStartPos] = useState<{ x: number; y: number } | null>(null)
   const { idd, ...circleProps } = props
 
@@ -26,32 +26,34 @@ const Joint = (props: JointProps) => {
   const onDrag = (e: KonvaEventObject<MouseEvent>) => {
     if (!multiSelected[idd]) {
       dispatch(setMultiSelected({}))
-      dispatch(moveVertex({ id: idd, x: e.target.attrs.x, y: e.target.attrs.y }))
+      dispatch(moveDot({ id: idd, x: e.target.attrs.x, y: e.target.attrs.y }))
       return
     }
-    dispatch(moveVertex({ id: idd, x: e.target.attrs.x, y: e.target.attrs.y }))
+    dispatch(moveDot({ id: idd, x: e.target.attrs.x, y: e.target.attrs.y }))
     const offsetX = e.target.attrs.x - dragStartPos!.x
     const offsetY = e.target.attrs.y - dragStartPos!.y
-    Object.entries(vertices)
+    Object.entries(dots)
       .filter(([id]) => multiSelected[id])
-      .forEach(([id, vertex]) => {
-        dispatch(moveVertex({ id: Number(id), x: vertex.x + offsetX, y: vertex.y + offsetY }))
+      .forEach(([id, dot]) => {
+        dispatch(moveDot({ id: Number(id), x: dot.x + offsetX, y: dot.y + offsetY }))
       })
 
     setDragStartPos({ x: e.target.attrs.x, y: e.target.attrs.y })
   }
 
   return (
-    <Circle
-      radius={10}
-      fill={idd === selected ? 'red' : 'blue'}
-      draggable={mode === Mode.IDLE}
-      onDragStart={onDragStart}
-      onDragMove={onDrag}
-      onDragEnd={onDrag}
-      {...circleProps}
-    />
+    <>
+      {(multiSelected[idd] || selected === idd) && <Circle radius={18} {...circleProps} opacity={0.4} />}
+      <Circle
+        radius={10}
+        draggable={mode === Mode.DRAG}
+        onDragStart={onDragStart}
+        onDragMove={onDrag}
+        onDragEnd={onDrag}
+        {...circleProps}
+      />
+    </>
   )
 }
 
-export default Joint
+export default Dot

@@ -5,30 +5,20 @@ import { Mode } from '../../features/control/controlSlice'
 import { moveHead } from '../../features/model/modelSlice'
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux'
 
-type JointProps = CircleConfig & {
+type HeadProps = CircleConfig & {
   idd: number
 }
 
-const Joint = (props: JointProps) => {
+const Head = (props: HeadProps) => {
   const dispatch = useAppDispatch()
   const mode = useAppSelector((state) => state.control.mode)
-  const selected = useAppSelector((state) => state.control.selected)
   const { idd, ...circleProps } = props
 
   const onDrag = (e: KonvaEventObject<MouseEvent>) => {
     dispatch(moveHead({ id: idd, x: e.target.attrs.x, y: e.target.attrs.y }))
   }
 
-  return (
-    <Circle
-      radius={50}
-      stroke={idd === selected ? 'red' : 'blue'}
-      draggable={mode === Mode.IDLE}
-      onDragMove={onDrag}
-      onDragEnd={onDrag}
-      {...circleProps}
-    />
-  )
+  return <Circle draggable={mode === Mode.DRAG} onDragMove={onDrag} onDragEnd={onDrag} {...circleProps} />
 }
 
-export default Joint
+export default Head
