@@ -2,7 +2,7 @@ import { CircleConfig } from 'konva/lib/shapes/Circle'
 import { Circle } from 'react-konva'
 import { useAppDispatch, useAppSelector } from '../../hooks/useRedux'
 import { Mode, setMultiSelected } from '../../features/control/controlSlice'
-import { moveDot } from '../../features/model/modelSlice'
+import { moveDot, moveHead } from '../../features/model/modelSlice'
 import { KonvaEventObject } from 'konva/lib/Node'
 import { useState } from 'react'
 
@@ -16,6 +16,7 @@ const Dot = (props: JointProps) => {
   const selected = useAppSelector((state) => state.control.selected)
   const multiSelected = useAppSelector((state) => state.control.multiSelected)
   const dots = useAppSelector((state) => state.model.dots)
+  const heads = useAppSelector((state) => state.model.heads)
   const [dragStartPos, setDragStartPos] = useState<{ x: number; y: number } | null>(null)
   const { idd, ...circleProps } = props
 
@@ -36,6 +37,11 @@ const Dot = (props: JointProps) => {
       .filter(([id]) => multiSelected[id])
       .forEach(([id, dot]) => {
         dispatch(moveDot({ id: Number(id), x: dot.x + offsetX, y: dot.y + offsetY }))
+      })
+    Object.entries(heads)
+      .filter(([id]) => multiSelected[id])
+      .forEach(([id, head]) => {
+        dispatch(moveHead({ id: Number(id), x: head.x + offsetX, y: head.y + offsetY }))
       })
 
     setDragStartPos({ x: e.target.attrs.x, y: e.target.attrs.y })

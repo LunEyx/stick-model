@@ -68,7 +68,17 @@ const Canvas = (props: CanvasProps) => {
         return hash
       }, {} as { [key: string]: boolean })
 
-      dispatch(setMultiSelected(within))
+      const within2 = Object.entries(heads).reduce((hash, [id, head]) => {
+        if (head.x > topLeft.x && head.x < bottomRight.x) {
+          if (head.y > topLeft.y && head.y < bottomRight.y) {
+            hash[id] = true
+          }
+        }
+
+        return hash
+      }, {} as { [key: string]: boolean })
+
+      dispatch(setMultiSelected({ ...within, ...within2 }))
     }
   }
 
